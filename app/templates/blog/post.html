@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} — {{ config.BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="page-inner post-page">
+  <header class="post-header">
+    <div class="post-header-meta">
+      <time>{{ post.created.strftime('%d %B %Y') }}</time>
+      {% for tag in post.tag_list() %}
+      <a href="{{ url_for('blog.index', tag=tag) }}" class="tag">{{ tag }}</a>
+      {% endfor %}
+    </div>
+    <h1 class="post-title">{{ post.title }}</h1>
+    {% if post.summary %}
+    <p class="post-lead">{{ post.summary }}</p>
+    {% endif %}
+  </header>
+
+  <div class="post-divider"></div>
+
+  <article class="post-content">
+    {{ post.html_content | safe }}
+  </article>
+
+  <div class="post-footer">
+    <a href="{{ url_for('blog.index') }}" class="back-link">← back to blog</a>
+  </div>
+</div>
+{% endblock %}

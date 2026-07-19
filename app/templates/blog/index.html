@@ -1,0 +1,49 @@
+
+{% extends "base.html" %}
+
+{% block title %}Blog — {{ config.BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="page-inner">
+  <div class="blog-header">
+    <h1 class="page-title">// blog</h1>
+    <p class="page-desc">Ghi chép về Kubernetes, DevOps, và hành trình học Systems Engineering.</p>
+  </div>
+
+  {% if all_tags %}
+  <div class="tag-filter">
+    <a href="{{ url_for('blog.index') }}" class="tag-btn {% if not active_tag %}active{% endif %}">all</a>
+    {% for tag in all_tags %}
+    <a href="{{ url_for('blog.index', tag=tag) }}" class="tag-btn {% if active_tag == tag %}active{% endif %}">{{ tag }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  {% if posts %}
+  <div class="posts-full">
+    {% for post in posts %}
+    <a href="{{ url_for('blog.post', slug=post.slug) }}" class="post-row-link">
+      <article class="post-row">
+        <div class="post-row-left">
+          <time class="post-date">{{ post.created.strftime('%d/%m/%Y') }}</time>
+        </div>
+        <div class="post-row-right">
+          <h2 class="post-row-title">{{ post.title }}</h2>
+          {% if post.summary %}<p class="post-row-summary">{{ post.summary }}</p>{% endif %}
+          <div class="post-row-tags">
+            {% for tag in post.tag_list() %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+          </div>
+        </div>
+      </article>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p class="term-output">// no posts found{% if active_tag %} for tag: <strong>{{ active_tag }}</strong>{% endif %}</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

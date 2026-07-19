@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{{ config.BLOG_TITLE }}{% endblock %}</title>
+  <meta name="description" content="{{ config.BLOG_DESCRIPTION }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="{{ url_for('main.home') }}" class="nav-logo">
+        <span class="logo-bracket">[</span>son<span class="logo-dot">@</span>blog<span class="logo-bracket">]</span>
+      </a>
+      <div class="nav-links">
+        <a href="{{ url_for('main.home') }}" class="nav-link {% if request.endpoint == 'main.home' %}active{% endif %}">home</a>
+        <a href="{{ url_for('blog.index') }}" class="nav-link {% if request.blueprint == 'blog' %}active{% endif %}">blog</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span class="footer-text">Son Nguyen &mdash; DevOps / Systems Engineering</span>
+      <span class="footer-stack">Flask · Docker · K8s · Ansible</span>
+    </div>
+  </footer>
+</body>
+</html>
