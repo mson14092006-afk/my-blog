@@ -8,6 +8,10 @@ on:
 
 env:
   IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/flask-blog
+  POSTGRES_DB: ${{ secrets.POSTGRES_DB }} 
+  POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+  POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+  
 
 jobs:
   test-python:
