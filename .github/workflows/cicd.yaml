@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/flask-blog
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/my-blog
   POSTGRES_DB: ${{ secrets.POSTGRES_DB }} 
   POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
   POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
@@ -38,11 +38,11 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build image
-        run: docker build -t flask-blog:test .
+        run: docker build -t my-blog:test .
 
       - name: Run container
         run: |
-          docker run -d --name flask-blog -p 5000:5000 flask-blog:test
+          docker run -d --name my-blog -p 5000:5000 my-blog:test
           sleep 10
 
       - name: Smoke test
@@ -50,7 +50,7 @@ jobs:
 
       - name: Cleanup
         if: always()
-        run: docker rm -f flask-blog
+        run: docker rm -f my-blog
 
   test-docker-compose:
     needs: test-docker
@@ -64,10 +64,6 @@ jobs:
 
       - name: Wait
         run: sleep 15
-      
-      - name: Show logs
-        if: always()
-        run: docker compose -f docker-compose.prod.yaml logs
 
       - name: Smoke test
         run: curl http://localhost:5000
