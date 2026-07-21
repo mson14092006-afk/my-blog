@@ -1,0 +1,73 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/flask-blog
+
+jobs:
+  test-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt pytest
+
+      - name: Run pytest
+        run: pytest tests/ -v
+
+  test-docker:
+    needs: test-python
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t flask-blog:test .
+
+      - name: Run container
+        run: |
+          docker run -d --name flask-blog -p 5000:5000 flask-blog:test
+          sleep 10
+
+      - name: Smoke test
+        run: curl http://localhost:5000
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f flask-blog
+
+  test-docker-compose:
+    needs: test-docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start compose
+        run: docker compose -f docker-compose.prod.yaml up -d
+
+      - name: Wait
+        run: sleep 15
+      
+      - name: Show logs
+        if: always()
+        run: docker compose -f docker-compose.prod.yaml logs
+
+      - name: Smoke test
+        run: curl http://localhost:5000
+
+      - name: Cleanup
+        if: always()
+        run: docker compose -f docker-compose.prod.yaml down
