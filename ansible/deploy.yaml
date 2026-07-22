@@ -1,34 +1,37 @@
 - name: Deploy Flask Blog to VPS
-  hosts: vps # Tên group trong inventory
-  become: true # Cấp quyền sudo cho tasks bên dưới
+  hosts: vps # Group trong file inventory 
+  become: true # Chạy các lệnh với quyền root (sudo)
 
-  vars:
-    app_dir: /opt/my-blog # Thư mục của web app
-    # /opt/my-blog thay vì /my-blog để tránh nằm trên thư mục gốc / -> lộn xộn
+  # Các biến được định nghĩa trong playbook
+  vars: 
+    app_dir: /opt/my-blog # Thư mục chứa ứng dụng Blog trên VPS
     docker_image: ghcr.io/mson14092006-afk/my-blog:latest
 
   tasks:
     - name: Install Docker
       apt:
         name: [docker.io, docker-compose] # sudo apt install docker.io docker-compose
-        state: present # Đảm bảo Docker phải tồn tại, chưa có thì cài
+        state: present
         update_cache: true # sudo apt update
 
     - name: Ensure app directory
       file:
         path: "{{ app_dir }}" # /opt/my-blog
-        state: directory # Đảm bảo thư mục đã tồn tại trên thiết bịn nếu chưa có thì mkdir -p /opt/my-blog
+        state: directory # đảm bảo thư mục tồn tạo (mkdir -p /opt/my-blog nếu chưa tồn tại, nếu đã tồn tại thì không làm gì)
         mode: "0755" #  sudo chmod 755 /opt/my-blog
-
     - name: Copy docker-compose
-      copy: # Đảm bảo file docker-compose.prod.yaml đã tồn tại trên thiết bị
-        src: ../docker-compose.prod.yaml # .. là thư mục cha của control node
-        # Hiện tại đang ở my-blog/ansible/, tìm file ở my-blog/
-        dest: "{{ app_dir }}/docker-compose.prod.yaml" # Thư mục của máy managed node
+      copy: # đảm bảo docker-compose.prod.yaml đã tồn tại trên VPS
+        src: ../docker-compose.prod.yaml
+        dest: "{{ app_dir }}/docker-compose.yml"
+
+    - name: Pull latest image
+      community.docker.docker_image: # pull the latest image from GitHub Container Registry
+        name: "{{ docker_image }}"
+        source: pull
+
     - name: Start services
       community.docker.docker_compose: # cd /opt/my-blog && sudo docker-compose up -d
         project_src: "{{ app_dir }}"
-        pull: true # Luôn lấy image mới nhất
         state: present
 
   #   - name: Install Nginx & Certbot
