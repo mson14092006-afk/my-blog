@@ -1,0 +1,61 @@
+- name: Deploy Flask Blog to VPS
+  hosts: vps # Tên group trong inventory
+  become: true # Cấp quyền sudo cho tasks bên dưới
+
+  vars:
+    app_dir: /opt/my-blog # Thư mục của web app
+    # /opt/my-blog thay vì /my-blog để tránh nằm trên thư mục gốc / -> lộn xộn
+    docker_image: ghcr.io/mson14092006-afk/my-blog:latest
+
+  tasks:
+    - name: Install Docker
+      apt:
+        name: [docker.io, docker-compose] # sudo apt install docker.io docker-compose
+        state: present # Đảm bảo Docker phải tồn tại, chưa có thì cài
+        update_cache: true # sudo apt update
+
+    - name: Ensure app directory
+      file:
+        path: "{{ app_dir }}" # /opt/my-blog
+        state: directory # Đảm bảo thư mục đã tồn tại trên thiết bịn nếu chưa có thì mkdir -p /opt/my-blog
+        mode: "0755" #  sudo chmod 755 /opt/my-blog
+
+    - name: Copy docker-compose
+      copy: # Đảm bảo file docker-compose.prod.yaml đã tồn tại trên thiết bị
+        src: ../docker-compose.prod.yaml # .. là thư mục cha của control node
+        # Hiện tại đang ở my-blog/ansible/, tìm file ở my-blog/
+        dest: "{{ app_dir }}/docker-compose.prod.yaml" # Thư mục của máy managed node
+    - name: Start services
+      community.docker.docker_compose: # cd /opt/my-blog && sudo docker-compose up -d
+        project_src: "{{ app_dir }}"
+        pull: true # Luôn lấy image mới nhất
+        state: present
+
+  #   - name: Install Nginx & Certbot
+  #     apt:
+  #       name: [nginx, certbot, python3-certbot-nginx] # certbot: xin ssl certificate free (http->https)
+  #       state: present
+
+  #   - name: Configure Nginx reverse proxy
+  #     template:
+  #       src: templates/nginx.conf.j2 # Render nginx.conf.j2 template và thay biến bằng domain (var)
+  #       dest: /etc/nginx/sites-available/flask-blog 
+  #     notify: reload nginx
+
+  #   - name: Enable Nginx site
+  #     file:
+  #       src: /etc/nginx/sites-available/flask-blog # site-available: chứa các file cấu hình của các website
+  #       dest: /etc/nginx/sites-enabled/flask-blog # site-enabled: chứa các file cấu hình của các website được kích hoạt
+  #       state: link # Kết nối file /etc/nginx/sites-available/flask-blog -> /etc/nginx/sites-enabled/flask-blog (kích hoạt các file cấu hình)
+
+  #   - name: Issue SSL cert (Let's Encrypt)
+  #     command: > # Triển khai certbot để xin chứng chỉ SSL miễn phí từ Let's Encrypt và cấu hình Nginx tự động
+  #       certbot --nginx -d {{ domain }} --non-interactive
+  #       --agree-tos -m mson14092006@gmail.com 
+  #     args: #
+  #       creates: /etc/letsencrypt/live/{{ domain }}/fullchain.pem # Nếu file fullchain.pem đã tồn tại, lệnh certbot sẽ không được thực thi lại
+  # handlers: # Nếu thay đổi Nginx reverse proxy config, handler reload nginx sẽ được gọi để reload Nginx
+  #   - name: reload nginx
+  #     service:
+  #       name: nginx
+  #       state: reloaded
