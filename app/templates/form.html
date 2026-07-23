@@ -1,0 +1,47 @@
+{# Form dùng chung cho Thêm bài viết và Sửa bài viết (Nhan đề + Nội dung) #}
+{% extends "base.html" %}
+
+{% block title %}{{ form_title }} — {{ config.BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="page-inner">
+  <div class="blog-header">
+    <h1 class="page-title">// {{ form_title }}</h1>
+  </div>
+
+  {% if error %}
+  <p style="color: var(--red); margin-bottom: 16px; font-family: var(--mono);">{{ error }}</p>
+  {% endif %}
+
+  <form method="POST" style="display:flex;flex-direction:column;gap:16px;max-width:640px;">
+    <label style="display:flex;flex-direction:column;gap:6px;color:var(--text-dim);font-family:var(--mono);font-size:16px;">
+      Nhan đề
+      <input type="text" name="title" value="{{ values.title }}" required
+             style="width:100%;padding:10px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);font-family:var(--sans);font-size:18px;">
+    </label>
+
+    <label style="display:flex;flex-direction:column;gap:6px;color:var(--text-dim);font-family:var(--mono);font-size:16px;">
+      Tóm tắt (tuỳ chọn)
+      <input type="text" name="summary" value="{{ values.summary }}"
+             style="width:100%;padding:10px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);font-family:var(--sans);font-size:18px;">
+    </label>
+
+    <label style="display:flex;flex-direction:column;gap:6px;color:var(--text-dim);font-family:var(--mono);font-size:16px;">
+      Tags (phân cách bằng dấu phẩy, tuỳ chọn)
+      <input type="text" name="tags" value="{{ values.tags }}"
+             style="width:100%;padding:10px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);font-family:var(--sans);font-size:18px;">
+    </label>
+
+    <label style="display:flex;flex-direction:column;gap:6px;color:var(--text-dim);font-family:var(--mono);font-size:16px;">
+      Nội dung (Markdown)
+      <textarea name="content" rows="16" required
+                style="width:100%;padding:10px;background:var(--bg-card);border:1px solid var(--border);color:var(--text);border-radius:var(--radius);font-family:var(--mono);font-size:16px;">{{ values.content }}</textarea>
+    </label>
+
+    <div style="display:flex;gap:12px;">
+      <button type="submit" class="pill-link primary" style="cursor:pointer;border:none;font-family:var(--mono);">Lưu</button>
+      <a href="{{ url_for('blog.manage') }}" class="pill-link">Huỷ</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

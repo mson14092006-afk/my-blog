@@ -14,17 +14,16 @@
       </div>
       <div class="terminal-body">
         <p class="term-line"><span class="prompt">$</span> whoami</p>
-        <p class="term-output">son nguyen</p>
+        <p class="term-output">Nguyen Minh Son</p>
         <p class="term-line"><span class="prompt">$</span> cat about.txt</p>
         <div class="term-output about-text">
-          <p>Sinh viên ngành Kỹ thuật Hệ thống & Cloud, đang build path<br>
-          hướng tới DevOps / Systems Engineering.</p>
-          <p>Đam mê: Kubernetes, CI/CD, Infrastructure as Code,<br>
-          và tất cả những thứ chạy trong container.</p>
+          <p>Sinh viên ngành Điện tử Viễn Thông (Đại học Bách Khoa Hà Nội)</p>
+          <p>Ngày sinh: 14/9/2006</p>
+          <p>Kỹ năng: Hệ điều hành Linux, CCNA, Cloud computing</p>
+          <p>Mục tiêu: Kỹ sư DevOps</p>
+          <p>SĐT: 0987060155</p>
+          <p>Email: mson14092006@gmail.com</p>
         </div>
-        <p class="term-line"><span class="prompt">$</span> cat stack.txt</p>
-        <p class="term-output">Python · Flask · Docker · Kubernetes · Prometheus · Ansible · Nginx</p>
-        <p class="term-line blink-line"><span class="prompt">$</span> <span class="cursor">█</span></p>
       </div>
     </div>
 
@@ -34,7 +33,7 @@
         <span>Đang học · Building in public</span>
       </div>
       <h1 class="hero-name">Son Nguyen</h1>
-      <p class="hero-role">DevOps Student / Systems Engineer in progress</p>
+      <p class="hero-role">DevOps Intern</p>
       <div class="hero-links">
         <a href="https://github.com/" class="pill-link" target="_blank">GitHub</a>
         <a href="{{ url_for('blog.index') }}" class="pill-link primary">Đọc blog →</a>
@@ -42,40 +41,11 @@
     </div>
   </div>
 </section>
-
-<section class="skills-section">
-  <div class="section-inner">
-    <h2 class="section-label">// current focus</h2>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <span class="skill-icon">⎈</span>
-        <h3>Kubernetes</h3>
-        <p>Kind, Minikube, KEDA autoscaling, taints & tolerations, HPA</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">⚙</span>
-        <h3>CI/CD</h3>
-        <p>GitHub Actions pipelines, Docker build & push, automated testing</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">📊</span>
-        <h3>Monitoring</h3>
-        <p>Prometheus, Grafana, custom exporters (Redfish / iRMC S5)</p>
-      </div>
-      <div class="skill-card">
-        <span class="skill-icon">🚀</span>
-        <h3>Infrastructure</h3>
-        <p>Ansible playbooks, Nginx, SSL/TLS, Cloudflare DNS, VPS deploy</p>
-      </div>
-    </div>
-  </div>
-</section>
-
 {% if recent_posts %}
 <section class="recent-section">
   <div class="section-inner">
     <div class="section-header">
-      <h2 class="section-label">// recent posts</h2>
+      <h2 class="section-label">// blog</h2>
       <a href="{{ url_for('blog.index') }}" class="view-all">xem tất cả →</a>
     </div>
     <div class="post-list">
@@ -96,6 +66,13 @@
       </a>
       {% endfor %}
     </div>
+  </div>
+</section>
+{% else %}
+<section class="recent-section">
+  <div class="section-inner">
+    <h2 class="section-label">// blog</h2>
+    <div class="empty-state"><p class="term-output">// chưa có bài viết nào</p></div>
   </div>
 </section>
 {% endif %}
