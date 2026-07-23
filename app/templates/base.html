@@ -18,7 +18,8 @@
       </a>
       <div class="nav-links">
         <a href="{{ url_for('main.home') }}" class="nav-link {% if request.endpoint == 'main.home' %}active{% endif %}">home</a>
-        <a href="{{ url_for('blog.index') }}" class="nav-link {% if request.blueprint == 'blog' %}active{% endif %}">blog</a>
+        <a href="{{ url_for('blog.index') }}" class="nav-link {% if request.blueprint == 'blog' and request.endpoint != 'blog.manage' and request.endpoint != 'blog.new_post' and request.endpoint != 'blog.edit_post' %}active{% endif %}">blog</a>
+        <a href="{{ url_for('blog.manage') }}" class="nav-link {% if request.endpoint in ['blog.manage', 'blog.new_post', 'blog.edit_post'] %}active{% endif %}">edit blog</a>
       </div>
     </div>
   </nav>
@@ -29,8 +30,8 @@
 
   <footer class="footer">
     <div class="footer-inner">
-      <span class="footer-text">Son Nguyen &mdash; DevOps / Systems Engineering</span>
-      <span class="footer-stack">Flask · Docker · K8s · Ansible</span>
+       <span class="footer-text">Son Nguyen</span>
+       <span class="footer-stack">DevOps Intern</span>
     </div>
   </footer>
 </body>

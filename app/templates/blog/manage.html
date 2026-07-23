@@ -1,0 +1,45 @@
+{# Template cho trang "Edit blog" — liệt kê bài viết, có link Sửa/Xoá và nút Thêm bài viết #}
+{% extends "base.html" %}
+
+{% block title %}Edit Blog — {{ config.BLOG_TITLE }}{% endblock %}
+
+{% block content %}
+<div class="page-inner">
+  <div class="blog-header">
+    <h1 class="page-title">// edit blog</h1>
+    <p class="page-desc">Quản lý bài viết: thêm, sửa, xoá.</p>
+  </div>
+
+  <a href="{{ url_for('blog.new_post') }}" class="pill-link primary" style="display:inline-block;margin-bottom:24px;">+ Thêm bài viết</a>
+
+  {% if posts %}
+  <div class="posts-full">
+    {% for post in posts %}
+    <div class="post-row">
+      <div class="post-row-left">
+        <time class="post-date">{{ post.created.strftime('%d/%m/%Y') }}</time>
+      </div>
+      <div class="post-row-right">
+        <h2 class="post-row-title">
+          {{ post.title }}
+          {% if not post.published %}<span class="tag">draft</span>{% endif %}
+        </h2>
+        {% if post.summary %}<p class="post-row-summary">{{ post.summary }}</p>{% endif %}
+        <div class="post-row-tags" style="gap:12px;align-items:center;">
+          <a href="{{ url_for('blog.edit_post', slug=post.slug) }}" class="pill-link">Sửa</a>
+          <form method="POST" action="{{ url_for('blog.delete_post', slug=post.slug) }}"
+                style="display:inline;" onsubmit="return confirm('Xoá bài viết này?');">
+            <button type="submit" class="pill-link" style="cursor:pointer;background:none;font-family:var(--mono);">Xoá</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <p class="term-output">// chưa có bài viết nào</p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
