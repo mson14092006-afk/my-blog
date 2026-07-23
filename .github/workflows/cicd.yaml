@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4 #
+      - uses: actions/checkout@v4 # Tải source code của repo xuống runner
 
       - uses: actions/setup-python@v5
         with:
@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4 # Tải source code của repo xuống runner
+      - uses: actions/checkout@v4 
 
       - name: Build image
         run: docker build -t my-blog:test .
@@ -45,6 +45,10 @@ jobs:
         run: |
           docker run -d --name my-blog -p 5000:5000 my-blog:test
           sleep 10
+      
+      - name: Run database migration
+        run: |
+          docker compose -f docker-compose.test.yaml exec app flask db upgrade
 
       - name: Smoke test
         run: curl http://localhost:5000
