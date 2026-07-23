@@ -2,9 +2,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import config
+from flask_migrate import Migrate
 
 # db là object SQLAlchemy dùng chung, import ở models.py và các nơi khác
 db = SQLAlchemy()
+migrate = Migrate()
 
 def create_app(env="default"): 
     app = Flask(__name__, instance_relative_config=False)
@@ -12,15 +14,14 @@ def create_app(env="default"):
 
     # Gắn SQLAlchemy vào app
     db.init_app(app)
+    # Gán Flask-Migrate vào app và db
+    migrate.init_app(app, db)
+
     # Đăng ký Blueprint — mỗi blueprint là một nhóm route
     from app.route.main import main_bp
     from app.route.blog import blog_bp
 
     app.register_blueprint(main_bp)
     app.register_blueprint(blog_bp, url_prefix="/blog")
-
-    # Tạo bảng trong SQLite nếu chưa có
-    with app.app_context():
-        db.create_all()
 
     return app

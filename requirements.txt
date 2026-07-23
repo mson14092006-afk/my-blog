@@ -1,5 +1,7 @@
-Flask==3.0.3
-Flask-SQLAlchemy==3.1.1
-markdown2==2.5.0
-gunicorn==22.0.0
-python-dotenv==1.0.1
+Flask==3.0.3                 # Framework web Python,
+Flask-SQLAlchemy==3.1.1      # Tích hợp SQLAlchemy vào Flask 
+markdown2==2.5.0             # Chuyển nội dung Markdown (.md) thành HTML
+gunicorn==22.0.0             # WSGI server dùng để chạy Flask trong môi trường production
+python-dotenv==1.0.1         # Đọc các biến môi trường từ file .env
+psycopg2-binary==2.9.10      # Driver giúp Python/SQLAlchemy kết nối và giao tiếp với PostgreSQL
+Flask-Migrate==4.0.7         # Migration
