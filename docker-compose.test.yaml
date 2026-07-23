@@ -1,3 +1,4 @@
+# Test CI/CD
 version: "3.9"
 services:
   app:
@@ -6,6 +7,8 @@ services:
       - "5000:5000"
     depends_on:
       - db
+    environment:
+      DATABASE_URL: postgresql://blog:123@db:5432/blog
 
   db:
     image: postgres:13
@@ -13,7 +16,6 @@ services:
       POSTGRES_DB: blog # Khởi tạo database
       POSTGRES_USER: blog
       POSTGRES_PASSWORD: 123
-      DATABASE_URL: postgresql://$blog:123@db:5432/blog
     volumes:
       - pg_data:/var/lib/postgresql/data
 volumes:
