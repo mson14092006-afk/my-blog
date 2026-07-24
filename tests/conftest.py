@@ -4,9 +4,14 @@
 import pytest
 from app import create_app, db
 from app.models import Post
+<<<<<<< HEAD
  
 # @pytest.fixture: Chuẩn bị môi trường trước khi test
 @pytest.fixture(scope="session") # scope= "session" -> chạy đúng 1 lần duy nhất toàn bộ quá trình chạy test
+=======
+  
+@pytest.fixture(scope="session")
+>>>>>>> 359d77e (Edit config.py)
 def app():
     """
     Tạo Flask app với config test:
@@ -14,6 +19,7 @@ def app():
     - SQLite in-memory: không tạo file, tự reset sau mỗi session
     Truyền env="default" vào create_app() đúng như signature của bạn.
     """
+<<<<<<< HEAD
     app = create_app(env="default") # Tạo Flask app
     app.config.update({ # ghi đè config.py
         "TESTING": True, # Bật chế độ test
@@ -21,6 +27,10 @@ def app():
         "SECRET_KEY": "test-secret",
     })
  
+=======
+    app = create_app(env="testing")
+    
+>>>>>>> 359d77e (Edit config.py)
     with app.app_context():
         db.create_all() # Trước khi test chạy, tạo ra database trống chứa các bảng
         yield app # Trong khi test chạy, gặp lênh yield app -> hàm fixture tạm dừng và giao biến app cho hàm test
@@ -44,7 +54,11 @@ def db_session(app): # Mỗi test, một session mới
         db.session.rollback()
         db.session.query(Post).delete()
         db.session.commit()
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 359d77e (Edit config.py)
 @pytest.fixture
 def sample_post(db_session):
     """Tạo một bài viết mẫu đã published vào DB."""

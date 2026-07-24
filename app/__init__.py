@@ -10,7 +10,7 @@ migrate = Migrate()
 
 def create_app(env="default"): 
     app = Flask(__name__, instance_relative_config=False)
-    app.config.from_object(config[env])
+    app.config.from_object(config[env]) # Lấy config tương ứng với môi trường (development, production, testing) trong config.py
 
     # Gắn SQLAlchemy vào app
     db.init_app(app)

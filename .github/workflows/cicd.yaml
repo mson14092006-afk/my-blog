@@ -46,10 +46,13 @@ jobs:
           docker run -d --name my-blog -p 5000:5000 my-blog:test
           sleep 10
       
+<<<<<<< HEAD
       - name: Run database migration
         run: |
           docker compose -f docker-compose.test.yaml exec app flask db upgrade
 
+=======
+>>>>>>> 359d77e (Edit config.py)
       - name: Smoke test
         run: curl http://localhost:5000
 
@@ -69,6 +72,9 @@ jobs:
 
       - name: Wait
         run: sleep 15
+
+      - name: Migrate database
+        run: docker compose -f docker-compose.test.yaml exec app flask db upgrade
 
       - name: Smoke test
         run: curl http://localhost:5000
