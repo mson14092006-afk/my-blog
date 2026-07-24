@@ -15,7 +15,7 @@ class DevelopmentConfig(Config):
  
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ["sqlite:///:memory"] # Sử dụng database SQLite trong môi trường test
+    SQLALCHEMY_DATABASE_URI = "sqlite:///:memory" # Sử dụng database SQLite trong môi trường test
     SECRET_KEY = "test-secret" # Khóa bí mật cho môi trường test, không quan trọng
 
 class ProductionConfig(Config):
