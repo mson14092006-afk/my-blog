@@ -41,13 +41,18 @@ jobs:
       - name: Build image
         run: docker build -t my-blog:test .
 
-      - name: Run container
+      - name: Run container and check logs
         run: |
           docker run -d --name my-blog -p 5000:5000 my-blog:test
           sleep 10
-      
+      - name: Show logs if failed
+           
       - name: Smoke test
         run: curl http://localhost:5000
+
+      - name: Show logs if failed
+        if: failure()
+        run: docker logs my-blog
 
       - name: Cleanup
         if: always()
@@ -71,6 +76,10 @@ jobs:
 
       - name: Smoke test
         run: curl http://localhost:5000
+      
+      - name: Show compose logs if failed
+        if: failure()
+        run: docker compose -f docker-compose.test.yaml logs
 
       - name: Cleanup
         if: always()
