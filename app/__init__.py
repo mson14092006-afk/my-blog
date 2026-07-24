@@ -3,6 +3,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from config import config
 from flask_migrate import Migrate
+import os
 
 # db là object SQLAlchemy dùng chung, import ở models.py và các nơi khác
 db = SQLAlchemy()
@@ -11,7 +12,7 @@ migrate = Migrate()
 def create_app(env="default"): 
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(config[env]) # Lấy config tương ứng với môi trường (development, production, testing) trong config.py
-    
+
     # Gán biến môi trường DATABASE_URL vào config SQLAlchemy sau khi đã load config từ config.py 
     if env in ("development", "production"): # Chỉ set DATABASE_URL trong môi trường dev và prod, không set trong test để dùng SQLite in-memory
         app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
