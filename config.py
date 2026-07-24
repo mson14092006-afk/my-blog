@@ -4,12 +4,6 @@ BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 # Cấu hình app Flask và SQLAlchemy
 class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-change-in-prod")
-<<<<<<< HEAD
-    SQLALCHEMY_DATABASE_URI = os.environ.get(
-        "DATABASE_URL",
-    )
-=======
->>>>>>> 359d77e (Edit config.py)
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     POSTS_DIR = os.path.join(BASE_DIR, "posts")
     BLOG_AUTHOR = "Son Nguyen"
