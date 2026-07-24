@@ -12,8 +12,7 @@ class Config:
 # Cấu hình riêng cho môi trường development và production (Kế thừa từ Config)
 class DevelopmentConfig(Config):
     DEBUG = True # Hiển thị lỗi chi tiết khi chạy app trong môi trường development
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"] # Nếu lỗi ở DATABASE_URL thì sửa ngay
-
+ 
 class TestingConfig(Config):
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ["sqlite:///:memory"] # Sử dụng database SQLite trong môi trường test
@@ -21,8 +20,6 @@ class TestingConfig(Config):
 
 class ProductionConfig(Config):
     DEBUG = False # Tắt chế độ debug trong môi trường production
-    SQLALCHEMY_DATABASE_URI = os.environ["DATABASE_URL"]
-# Chọn config dựa trên biến môi trường FLASK_ENV, mặc định là development
 config = {
     "testing": TestingConfig,
     "development": DevelopmentConfig,

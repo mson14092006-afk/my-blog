@@ -11,7 +11,8 @@ migrate = Migrate()
 def create_app(env="default"): 
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object(config[env]) # Lấy config tương ứng với môi trường (development, production, testing) trong config.py
-
+    if env in ("development", "production"): # Chỉ set DATABASE_URL trong môi trường dev và prod, không set trong test để dùng SQLite in-memory
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.environ["DATABASE_URL"]
     # Gắn SQLAlchemy vào app
     db.init_app(app)
     # Gán Flask-Migrate vào app và db
