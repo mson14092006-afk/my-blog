@@ -1,3 +1,4 @@
+import os
 # Luôn lấy vị trí thật của file config.py, không quan tâm chạy ở đâu, để tránh lỗi khi chạy gunicorn
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 # Cấu hình app Flask và SQLAlchemy
