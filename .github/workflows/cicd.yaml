@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4 #
+      - uses: actions/checkout@v4 # Tải source code của repo xuống runner
 
       - uses: actions/setup-python@v5
         with:
@@ -31,30 +31,8 @@ jobs:
       - name: Run pytest
         run: pytest tests/ -v
 
-  test-docker:
-    needs: test-python
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4 # Tải source code của repo xuống runner
-
-      - name: Build image
-        run: docker build -t my-blog:test .
-
-      - name: Run container
-        run: |
-          docker run -d --name my-blog -p 5000:5000 my-blog:test
-          sleep 10
-
-      - name: Smoke test
-        run: curl http://localhost:5000
-
-      - name: Cleanup
-        if: always()
-        run: docker rm -f my-blog
-
   test-docker-compose:
-    needs: test-docker
+    needs: test-python
     runs-on: ubuntu-latest
 
     steps:
@@ -66,8 +44,15 @@ jobs:
       - name: Wait
         run: sleep 15
 
+      - name: Migrate database
+        run: docker compose -f docker-compose.test.yaml exec app flask db upgrade
+
       - name: Smoke test
         run: curl http://localhost:5000
+      
+      - name: Show compose logs if failed
+        if: failure()
+        run: docker compose -f docker-compose.test.yaml logs
 
       - name: Cleanup
         if: always()

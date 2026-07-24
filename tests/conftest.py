@@ -4,25 +4,12 @@
 import pytest
 from app import create_app, db
 from app.models import Post
- 
- 
-# ── App fixture ──────────────────────────────────────────────────────────────
- 
+  
 @pytest.fixture(scope="session")
 def app():
-    """
-    Tạo Flask app với config test:
-    - TESTING=True: Flask trả về lỗi thay vì trang 500
-    - SQLite in-memory: không tạo file, tự reset sau mỗi session
-    Truyền env="default" vào create_app() đúng như signature của bạn.
-    """
-    app = create_app(env="default")
-    app.config.update({
-        "TESTING": True,
-        "SQLALCHEMY_DATABASE_URI": "sqlite:///:memory:",
-        "SECRET_KEY": "test-secret",
-    })
- 
+    """Tạo app Flask cho toàn bộ test suite."""
+    app = create_app(env="testing")
+    
     with app.app_context():
         db.create_all()
         yield app
@@ -46,10 +33,7 @@ def db_session(app):
         db.session.rollback()
         db.session.query(Post).delete()
         db.session.commit()
- 
- 
-# ── Data fixtures ─────────────────────────────────────────────────────────────
- 
+  
 @pytest.fixture
 def sample_post(db_session):
     """Tạo một bài viết mẫu đã published vào DB."""
