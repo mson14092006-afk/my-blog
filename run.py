@@ -1,4 +1,4 @@
-import os
+import osio
 from app import create_app
 # Lấy biến môi trường FLASK_ENV, mặc định là "development"
 env = os.environ.get("FLASK_ENV", "development")
