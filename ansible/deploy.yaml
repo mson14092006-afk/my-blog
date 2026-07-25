@@ -10,7 +10,9 @@
   tasks:
     - name: Install Docker
       apt:
-        name: [docker.io, docker-compose] # sudo apt install docker.io docker-compose
+        name: # sudo apt install docker.io docker-compose
+        - docker.io 
+        - docker-compose-v2 # Docker-compose v2 (docker compose) thay vì v1 (docker-compose)
         state: present
         update_cache: true # sudo apt update
         cache_valid_time: 3600 # Nếu apt update đã được chạy trong vòng 1 giờ trước đó thì không chạy lại
@@ -20,6 +22,19 @@
         path: "{{ app_dir }}" # /opt/my-blog
         state: directory # đảm bảo thư mục tồn tạo (mkdir -p /opt/my-blog nếu chưa tồn tại, nếu đã tồn tại thì không làm gì)
         mode: "0755" #  sudo chmod 755 /opt/my-blog
+    
+    - name: Add exporter to docker group
+      user:
+        name: exporter
+        groups: docker # Set group của user exporter là docker
+        append: yes # sudo usermod -aG docker exporter
+  
+    - name: Generate .env
+      template:
+        src: templates/env.j2 # Truyền các biến môi trường từ Ansible vào file .env trên VPS
+        dest: "{{ app_dir }}/.env"
+        mode: "0640" # Set quyền read cho exporter 
+
     - name: Copy docker-compose
       copy: # đảm bảo docker-compose.prod.yaml đã tồn tại trên VPS
         src: ../docker-compose.prod.yaml
@@ -31,14 +46,20 @@
         source: pull
 
     - name: Start services
-      community.docker.docker_compose: # cd /opt/my-blog && sudo docker-compose up -d
+      community.docker.docker_compose_v2: # cd /opt/my-blog && sudo docker-compose up -d
         project_src: "{{ app_dir }}"
         state: present
+        recreate: always # luôn recreate container để tránh chạy container cũ 
+    
+    - name: Run Database Migrations
+      community.docker.docker_container_exec:
+        container: app # Tên service/container chạy Flask app (định nghĩa trong docker-compose.yml)
+        command: flask db upgrade
 
-  #   - name: Install Nginx & Certbot
-  #     apt:
-  #       name: [nginx, certbot, python3-certbot-nginx] # certbot: xin ssl certificate free (http->https)
-  #       state: present
+    - name: Install Nginx
+      apt:
+        name: [nginx] 
+        state: present
 
     - name: Configure Nginx reverse proxy
       template:
