@@ -17,6 +17,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB} # Khởi tạo database
       POSTGRES_USER: ${POSTGRES_USER} 
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY} # Khởi tạo secret key
     volumes:
       - pg_data:/var/lib/postgresql/data
 volumes:
