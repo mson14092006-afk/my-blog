@@ -22,13 +22,7 @@
         path: "{{ app_dir }}" # /opt/my-blog
         state: directory # đảm bảo thư mục tồn tạo (mkdir -p /opt/my-blog nếu chưa tồn tại, nếu đã tồn tại thì không làm gì)
         mode: "0755" #  sudo chmod 755 /opt/my-blog
-    
-    - name: Add exporter to docker group
-      user:
-        name: exporter
-        groups: docker # Set group của user exporter là docker
-        append: yes # sudo usermod -aG docker exporter
-  
+ 
     - name: Generate .env
       template:
         src: templates/env.j2 # Truyền các biến môi trường từ Ansible vào file .env trên VPS
