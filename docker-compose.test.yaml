@@ -1,24 +1,23 @@
-# Test CI/CD
 version: "3.9"
 services:
   app:
-    image: ghcr.io/mson14092006-afk/my-blog:latest 
+    image: ghcr.io/mson14092006-afk/my-blog:latest
     container_name: app
     ports:
       - "5000:5000"
     depends_on:
       - db
     environment:
-      DATABASE_URL: postgresql://blog:123@db:5432/blog
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
 
   db:
     image: postgres:13
     container_name: db
     environment:
-      POSTGRES_DB: blog # Khởi tạo database
-      POSTGRES_USER: blog
-      POSTGRES_PASSWORD: 123
-      SECRET_KEY: ${SECRET_KEY}
+      POSTGRES_DB: ${POSTGRES_DB} # Khởi tạo database
+      POSTGRES_USER: ${POSTGRES_USER} 
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY} # Khởi tạo secret key
     volumes:
       - pg_data:/var/lib/postgresql/data
 volumes:
