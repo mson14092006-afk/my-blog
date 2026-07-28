@@ -9,6 +9,7 @@ services:
       - db
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
+      FLASK_ENV: production
 
   db:
     image: postgres:13
@@ -17,6 +18,7 @@ services:
       POSTGRES_DB: ${POSTGRES_DB} # Khởi tạo database
       POSTGRES_USER: ${POSTGRES_USER} 
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SECRET_KEY: ${SECRET_KEY} # Khởi tạo secret key
     volumes:
       - pg_data:/var/lib/postgresql/data
 volumes:
