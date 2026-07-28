@@ -21,7 +21,7 @@ services:
       POSTGRES_DB: blog
       POSTGRES_USER: blog
       POSTGRES_PASSWORD: 123
-      SECRET_KEY: ${SECRET_KEY}
+      SECRET_KEY: 123
     volumes:
       - pg_data:/var/lib/postgresql/data
     restart: unless-stopped
