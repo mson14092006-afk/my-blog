@@ -91,28 +91,28 @@ jobs:
             ${{ env.IMAGE_NAME }}:${{ github.sha }}
           # latest: con trò đến phiên bản mới nhất
           # sha: Tag cố định không bao giờ thay đổi
-    deploy:
-      needs: build-and-push
-      if: github.ref == 'refs/heads/main'
+  deploy:
+    needs: build-and-push
+    if: github.ref == 'refs/heads/main'
 
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
 
-      steps:
-        - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-        - name: Install Ansible
-          run: |
-            sudo apt update
-            sudo apt install -y ansible
+      - name: Install Ansible
+        run: |
+          sudo apt update
+          sudo apt install -y ansible
 
-        - name: Setup SSH Key
-          run: |
-            mkdir -p ~/.ssh/aws
-            echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/aws/my-blog-key.pem
-            chmod 600 ~/.ssh/aws/my-blog-key.pem
-            ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-           # 600: Set quyền file 600 để SSH mới hoạt động
-           # ssh-keyscan -H: lấy public host key của server rồi thêm vào known_hosts
+      - name: Setup SSH Key
+        run: |
+          mkdir -p ~/.ssh/aws
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/aws/my-blog-key.pem
+          chmod 600 ~/.ssh/aws/my-blog-key.pem
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+        # 600: Chỉ owner được đọc/ghi private key, OpenSSH sẽ từ chối nếu quyền quá rộng
+        # ssh-keyscan -H: Lấy host public key của EC2 và thêm vào ~/.ssh/known_hosts
 
       - name: Create Ansible Vault password file
         run: |
@@ -123,9 +123,9 @@ jobs:
           ansible-playbook ansible/deploy.yaml \
             -i ansible/inventory.ini \
             --vault-password-file vault_pass.txt
-        # Nhập ansible vault pass 
+        # Dùng file chứa Vault password để Ansible tự giải mã group_vars/all.yaml.
 
-      - name: Wait for application
+      - name: Wait
         run: sleep 10
 
       - name: Health Check
