@@ -21,6 +21,15 @@ A production-ready Flask Blog application deployed on AWS EC2 using Docker Compo
 
 <h2>Screenshots</h2>
 <h3>Homepage</h3>
+<img width="1917" height="1076" alt="image" src="https://github.com/user-attachments/assets/8dbb5135-e915-4d0c-a489-09b932f4fcf6" />
+<h3>Create blog</h3>
+<img width="1917" height="997" alt="image" src="https://github.com/user-attachments/assets/67ba3c29-9c1f-4ce7-ac21-ff389768d727" />
+<h3>CRUD</h3>
+<img width="1917" height="738" alt="image" src="https://github.com/user-attachments/assets/62fd32bf-7968-43ad-9a4d-2625fc463bda" />
+<h3>HTTPS</h3>
+<img width="1912" height="337" alt="image" src="https://github.com/user-attachments/assets/ae17fe7c-3c01-4423-9e61-df74af03a6ef" />
+
+
 <h3>Github Action</h3>
 <img width="1353" height="202" alt="image" src="https://github.com/user-attachments/assets/68b425f6-05be-4ac4-881c-86942a2eb86b" />
 
